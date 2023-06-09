@@ -2,28 +2,57 @@ package parking
 
 fun main() {
 
-    class ParkingLot(var carParkingNow: String = "empty") {
-
-        fun justParked(car: String) {
-            carParkingNow = car
-            println("$car car just parked here.")
+    class ParkingLot(
+        var isFree: Boolean = true,
+        var regNumber: String = "",
+        var colorOfTheCar: String = "",
+    ) {
+        fun createSpot(isFree: Boolean): ParkingLot {
+            return ParkingLot(isFree)
         }
 
-        fun leftParking() {
-            println("$carParkingNow car left the parking lot.")
-            carParkingNow = "empty"
+        fun park(newCar: String, spot: Int) {
+            val inputString = newCar.split(" ")
+            isFree = false
+            regNumber = inputString[1]
+            colorOfTheCar = inputString[2]
+            println("$colorOfTheCar car parked in spot $spot.")
         }
 
-        fun parkingNow() {
-            println("$carParkingNow car has parked.")
+        fun leave(spotNumber: Int) {
+            if (!isFree) {
+                isFree = true
+                regNumber = ""
+                colorOfTheCar = ""
+                println("Spot $spotNumber is free.")
+            } else {
+                println("There is no car in spot $spotNumber.")
+            }
+
         }
     }
 
-    val lot1 = ParkingLot("White")
-    val lot2 = ParkingLot("Yellow")
-    val lot3 = ParkingLot()
+    val listOfCreatedSpots = mutableListOf<ParkingLot>()
+    val spot1 = ParkingLot().createSpot(false)
+    listOfCreatedSpots.add(spot1)
+    val spot2 = ParkingLot().createSpot(true)
+    listOfCreatedSpots.add(spot2)
 
-    lot1.parkingNow()
-    lot2.leftParking()
-    lot3.justParked("Green")
+    val inputString = readln()
+    when {
+        inputString.startsWith("park") -> {
+            for (i in 0 until listOfCreatedSpots.size) {
+                if (!listOfCreatedSpots[i].isFree) {
+                    continue
+                } else {
+                    listOfCreatedSpots[i].park(inputString, i + 1)
+                    break
+                }
+            }
+        }
+        inputString.startsWith("leave") -> {
+            val numberOfSpot = inputString.split(" ")[1].toInt()
+            listOfCreatedSpots[numberOfSpot - 1].leave(numberOfSpot)
+        }
+    }
 }
