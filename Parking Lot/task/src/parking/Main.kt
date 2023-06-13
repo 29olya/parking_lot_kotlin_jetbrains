@@ -114,6 +114,76 @@ fun main() {
         exitProcess(1)
     }
 
+    fun regByColor(input: String) {
+        if (listOfCreatedSpots.isEmpty()) {
+            println("Sorry, a parking lot has not been created.")
+        } else {
+            if (checkIsEmpty()) {
+                println("Parking lot is empty.")
+            } else {
+                val color = input.split(" ")[1]
+                val regsWithColors = mutableListOf<String>()
+                for (i in 0 until listOfCreatedSpots.size) {
+                    if (listOfCreatedSpots[i].colorOfTheCar.lowercase() == color.lowercase()) {
+                        regsWithColors.add(listOfCreatedSpots[i].regNumber)
+                    }
+
+                }
+                if (regsWithColors.size == 0) {
+                    println("No cars with color $color were found.")
+                } else {
+                    println(regsWithColors.joinToString(", "))
+                }
+            }
+        }
+    }
+
+    fun spotByColor(input: String) {
+        if (listOfCreatedSpots.isEmpty()) {
+            println("Sorry, a parking lot has not been created.")
+        } else {
+            if (checkIsEmpty()) {
+                println("Parking lot is empty.")
+            } else {
+                val color = input.split(" ")[1]
+                val spotsWithColors = mutableListOf<Int>()
+                for (i in 0 until listOfCreatedSpots.size) {
+                    if (listOfCreatedSpots[i].colorOfTheCar.lowercase() == color.lowercase()) {
+                        spotsWithColors.add(i + 1)
+                    }
+                }
+                if (spotsWithColors.size == 0) {
+                    println("No cars with color $color were found.")
+                } else {
+                    println(spotsWithColors.joinToString(", "))
+                }
+            }
+        }
+    }
+
+    fun spotByReg(input: String) {
+        if (listOfCreatedSpots.isEmpty()) {
+            println("Sorry, a parking lot has not been created.")
+        } else {
+            if (checkIsEmpty()) {
+                println("Parking lot is empty.")
+            } else {
+                val number = input.split(" ")[1]
+                var spotWithReg = ""
+                for (i in 0 until listOfCreatedSpots.size) {
+                    if (listOfCreatedSpots[i].regNumber == number) {
+                        spotWithReg = (i + 1).toString()
+                    }
+                }
+                if (spotWithReg == "") {
+                    println("No cars with registration number $number were found.")
+                } else {
+                    println(spotWithReg)
+                }
+            }
+        }
+    }
+
     while (true) {
         val inputString = readln()
         when {
@@ -122,8 +192,12 @@ fun main() {
             inputString.startsWith("leave") -> leave(inputString)
             inputString == "status" -> status()
             inputString == "exit" -> exit()
+            inputString.startsWith("reg_by_color") -> regByColor(inputString)
+            inputString.startsWith("spot_by_color") -> spotByColor(inputString)
+            inputString.startsWith("spot_by_reg") -> spotByReg(inputString)
         }
     }
 }
+
 
 
